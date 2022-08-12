@@ -27,7 +27,7 @@ The extension itself has no dependencies but development is greatly simplified w
 A future version of this repo will include instructions for installing MSMQ on a Windows Server (hint: Add Feature : Messaging Service / MSMQ) and include a loadgen PowerShell script that will simulate MSMQ traffic so you can see something when you deploy this extension.
 
 **TODO: Add this info!** 
-### Virtual Environment
+### Installing dependencies and a Virtual Environment
 
 If you are familiar with the Python [Poetry](https://python-poetry.org/) tool for package management, there is an included `pyproject.toml` file that contains project dependencies. 
 
