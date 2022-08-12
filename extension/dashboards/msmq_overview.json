@@ -1,0 +1,718 @@
+{
+    "metadata": {
+        "configurationVersions": [
+            6
+        ],
+        "clusterVersion": "1.242.98.20220513-170416"
+    },
+    "id": "707c654e-8fc0-41ee-8a54-e8a9e8b8cf3b",
+    "dashboardMetadata": {
+        "name": "MSMQ Overview",
+        "shared": false,
+        "owner": "Dynatrace",
+        "tags": [
+            "Overview",
+            "MSMQ"
+        ]
+    },
+    "tiles": [{
+            "name": "Markdown",
+            "tileType": "MARKDOWN",
+            "configured": true,
+            "bounds": {
+                "top": 76,
+                "left": 0,
+                "width": 304,
+                "height": 228
+            },
+            "tileFilter": {},
+            "markdown": "## 🔗 MSMQ entities\n---\n### 🖥️ [MSMQ Service Instances](ui/entity/list/wmi:msmq_service_instance)\n### 🛍️ [MSMQ Service Queues](ui/entity/list/wmi:msmq_service_instance_queue)"
+        },
+        {
+            "name": "Markdown",
+            "tileType": "MARKDOWN",
+            "configured": true,
+            "bounds": {
+                "top": 76,
+                "left": 304,
+                "width": 304,
+                "height": 76
+            },
+            "tileFilter": {},
+            "markdown": "## Currently monitoring\n---"
+        },
+        {
+            "name": "Title Service",
+            "tileType": "MARKDOWN",
+            "configured": true,
+            "bounds": {
+                "top": 304,
+                "left": 0,
+                "width": 570,
+                "height": 38
+            },
+            "tileFilter": {},
+            "markdown": "## Service"
+        },
+        {
+            "name": "Title Service Queue",
+            "tileType": "MARKDOWN",
+            "configured": true,
+            "bounds": {
+                "top": 608,
+                "left": 0,
+                "width": 570,
+                "height": 38
+            },
+            "tileFilter": {},
+            "markdown": "## Service Queue"
+        },
+        {
+            "name": "Service",
+            "tileType": "DATA_EXPLORER",
+            "configured": true,
+            "bounds": {
+                "top": 342,
+                "left": 0,
+                "width": 570,
+                "height": 266
+            },
+            "tileFilter": {},
+            "customName": "Table",
+            "queries": [{
+                    "id": "A",
+                    "metric": "custom.msmq_wmi.messages_in_queue",
+                    "spaceAggregation": "AVG",
+                    "timeAggregation": "DEFAULT",
+                    "splitBy": [
+                        "dt.entity.wmi:msmq_service_instance"
+                    ],
+                    "enabled": true
+                },
+                {
+                    "id": "B",
+                    "metric": "custom.msmq_wmi.bytes_in_queue",
+                    "spaceAggregation": "AVG",
+                    "timeAggregation": "DEFAULT",
+                    "splitBy": [
+                        "dt.entity.wmi:msmq_service_instance"
+                    ],
+                    "enabled": true
+                }
+            ],
+            "visualConfig": {
+                "type": "TABLE",
+                "global": {},
+                "rules": [{
+                        "matcher": "A:",
+                        "properties": {
+                            "color": "DEFAULT"
+                        },
+                        "seriesOverrides": []
+                    },
+                    {
+                        "matcher": "B:",
+                        "properties": {
+                            "color": "DEFAULT"
+                        },
+                        "seriesOverrides": []
+                    }
+                ],
+                "axes": {
+                    "xAxis": {
+                        "visible": true
+                    },
+                    "yAxes": []
+                },
+                "heatmapSettings": {
+                    "yAxis": "VALUE"
+                },
+                "thresholds": [{
+                    "axisTarget": "LEFT",
+                    "rules": [{
+                            "color": "#7dc540"
+                        },
+                        {
+                            "color": "#f5d30f"
+                        },
+                        {
+                            "color": "#dc172a"
+                        }
+                    ],
+                    "visible": true
+                }],
+                "tableSettings": {},
+                "graphChartSettings": {
+                    "connectNulls": false
+                },
+                "honeycombSettings": {
+                    "showHive": true,
+                    "showLegend": true,
+                    "showLabels": false
+                }
+            }
+        },
+        {
+            "name": "Service Queue",
+            "tileType": "DATA_EXPLORER",
+            "configured": true,
+            "bounds": {
+                "top": 646,
+                "left": 0,
+                "width": 570,
+                "height": 266
+            },
+            "tileFilter": {},
+            "customName": "Table",
+            "queries": [{
+                    "id": "A",
+                    "metric": "custom.msmq_wmi.messages_in_queue",
+                    "spaceAggregation": "AVG",
+                    "timeAggregation": "DEFAULT",
+                    "splitBy": [
+                        "dt.entity.wmi:msmq_service_instance_queue"
+                    ],
+                    "enabled": true
+                },
+                {
+                    "id": "B",
+                    "metric": "custom.msmq_wmi.bytes_in_queue",
+                    "spaceAggregation": "AVG",
+                    "timeAggregation": "DEFAULT",
+                    "splitBy": [
+                        "dt.entity.wmi:msmq_service_instance_queue"
+                    ],
+                    "enabled": true
+                }
+            ],
+            "visualConfig": {
+                "type": "TABLE",
+                "global": {},
+                "rules": [{
+                        "matcher": "A:",
+                        "properties": {
+                            "color": "DEFAULT"
+                        },
+                        "seriesOverrides": []
+                    },
+                    {
+                        "matcher": "B:",
+                        "properties": {
+                            "color": "DEFAULT"
+                        },
+                        "seriesOverrides": []
+                    }
+                ],
+                "axes": {
+                    "xAxis": {
+                        "visible": true
+                    },
+                    "yAxes": []
+                },
+                "heatmapSettings": {
+                    "yAxis": "VALUE"
+                },
+                "thresholds": [{
+                    "axisTarget": "LEFT",
+                    "rules": [{
+                            "color": "#7dc540"
+                        },
+                        {
+                            "color": "#f5d30f"
+                        },
+                        {
+                            "color": "#dc172a"
+                        }
+                    ],
+                    "visible": true
+                }],
+                "tableSettings": {},
+                "graphChartSettings": {
+                    "connectNulls": false
+                },
+                "honeycombSettings": {
+                    "showHive": true,
+                    "showLegend": true,
+                    "showLabels": false
+                }
+            }
+        },
+        {
+            "name": "Messages in Queue (MSMQ)",
+            "tileType": "DATA_EXPLORER",
+            "configured": true,
+            "bounds": {
+                "top": 342,
+                "left": 570,
+                "width": 418,
+                "height": 266
+            },
+            "tileFilter": {},
+            "customName": "Data explorer results",
+            "queries": [{
+                "id": "A",
+                "metric": "custom.msmq_wmi.messages_in_queue",
+                "spaceAggregation": "AVG",
+                "timeAggregation": "DEFAULT",
+                "splitBy": [
+                    "dt.entity.wmi:msmq_service_instance"
+                ],
+                "enabled": true
+            }],
+            "visualConfig": {
+                "type": "GRAPH_CHART",
+                "global": {},
+                "rules": [{
+                    "matcher": "A:",
+                    "properties": {
+                        "color": "DEFAULT"
+                    },
+                    "seriesOverrides": []
+                }],
+                "axes": {
+                    "xAxis": {
+                        "visible": true
+                    },
+                    "yAxes": []
+                },
+                "heatmapSettings": {
+                    "yAxis": "VALUE"
+                },
+                "thresholds": [{
+                    "axisTarget": "LEFT",
+                    "rules": [{
+                            "color": "#7dc540"
+                        },
+                        {
+                            "color": "#f5d30f"
+                        },
+                        {
+                            "color": "#dc172a"
+                        }
+                    ],
+                    "visible": true
+                }],
+                "tableSettings": {},
+                "graphChartSettings": {
+                    "connectNulls": false
+                },
+                "honeycombSettings": {
+                    "showHive": true,
+                    "showLegend": true,
+                    "showLabels": false
+                }
+            }
+        },
+        {
+            "name": "Bytes in Queue (MSMQ)",
+            "tileType": "DATA_EXPLORER",
+            "configured": true,
+            "bounds": {
+                "top": 342,
+                "left": 988,
+                "width": 418,
+                "height": 266
+            },
+            "tileFilter": {},
+            "customName": "Data explorer results",
+            "queries": [{
+                "id": "A",
+                "metric": "custom.msmq_wmi.bytes_in_queue",
+                "spaceAggregation": "AVG",
+                "timeAggregation": "DEFAULT",
+                "splitBy": [
+                    "dt.entity.wmi:msmq_service_instance"
+                ],
+                "enabled": true
+            }],
+            "visualConfig": {
+                "type": "GRAPH_CHART",
+                "global": {},
+                "rules": [{
+                    "matcher": "A:",
+                    "properties": {
+                        "color": "DEFAULT"
+                    },
+                    "seriesOverrides": []
+                }],
+                "axes": {
+                    "xAxis": {
+                        "visible": true
+                    },
+                    "yAxes": []
+                },
+                "heatmapSettings": {
+                    "yAxis": "VALUE"
+                },
+                "thresholds": [{
+                    "axisTarget": "LEFT",
+                    "rules": [{
+                            "color": "#7dc540"
+                        },
+                        {
+                            "color": "#f5d30f"
+                        },
+                        {
+                            "color": "#dc172a"
+                        }
+                    ],
+                    "visible": true
+                }],
+                "tableSettings": {},
+                "graphChartSettings": {
+                    "connectNulls": false
+                },
+                "honeycombSettings": {
+                    "showHive": true,
+                    "showLegend": true,
+                    "showLabels": false
+                }
+            }
+        },
+        {
+            "name": "Messages in Queue (MSMQ)",
+            "tileType": "DATA_EXPLORER",
+            "configured": true,
+            "bounds": {
+                "top": 646,
+                "left": 570,
+                "width": 418,
+                "height": 266
+            },
+            "tileFilter": {},
+            "customName": "Data explorer results",
+            "queries": [{
+                "id": "A",
+                "metric": "custom.msmq_wmi.messages_in_queue",
+                "spaceAggregation": "AVG",
+                "timeAggregation": "DEFAULT",
+                "splitBy": [
+                    "dt.entity.wmi:msmq_service_instance_queue"
+                ],
+                "enabled": true
+            }],
+            "visualConfig": {
+                "type": "GRAPH_CHART",
+                "global": {},
+                "rules": [{
+                    "matcher": "A:",
+                    "properties": {
+                        "color": "DEFAULT"
+                    },
+                    "seriesOverrides": []
+                }],
+                "axes": {
+                    "xAxis": {
+                        "visible": true
+                    },
+                    "yAxes": []
+                },
+                "heatmapSettings": {
+                    "yAxis": "VALUE"
+                },
+                "thresholds": [{
+                    "axisTarget": "LEFT",
+                    "rules": [{
+                            "color": "#7dc540"
+                        },
+                        {
+                            "color": "#f5d30f"
+                        },
+                        {
+                            "color": "#dc172a"
+                        }
+                    ],
+                    "visible": true
+                }],
+                "tableSettings": {},
+                "graphChartSettings": {
+                    "connectNulls": false
+                },
+                "honeycombSettings": {
+                    "showHive": true,
+                    "showLegend": true,
+                    "showLabels": false
+                }
+            }
+        },
+        {
+            "name": "Bytes in Queue (MSMQ)",
+            "tileType": "DATA_EXPLORER",
+            "configured": true,
+            "bounds": {
+                "top": 646,
+                "left": 988,
+                "width": 418,
+                "height": 266
+            },
+            "tileFilter": {},
+            "customName": "Data explorer results",
+            "queries": [{
+                "id": "A",
+                "metric": "custom.msmq_wmi.bytes_in_queue",
+                "spaceAggregation": "AVG",
+                "timeAggregation": "DEFAULT",
+                "splitBy": [
+                    "dt.entity.wmi:msmq_service_instance_queue"
+                ],
+                "enabled": true
+            }],
+            "visualConfig": {
+                "type": "GRAPH_CHART",
+                "global": {},
+                "rules": [{
+                    "matcher": "A:",
+                    "properties": {
+                        "color": "DEFAULT"
+                    },
+                    "seriesOverrides": []
+                }],
+                "axes": {
+                    "xAxis": {
+                        "visible": true
+                    },
+                    "yAxes": []
+                },
+                "heatmapSettings": {
+                    "yAxis": "VALUE"
+                },
+                "thresholds": [{
+                    "axisTarget": "LEFT",
+                    "rules": [{
+                            "color": "#7dc540"
+                        },
+                        {
+                            "color": "#f5d30f"
+                        },
+                        {
+                            "color": "#dc172a"
+                        }
+                    ],
+                    "visible": true
+                }],
+                "tableSettings": {},
+                "graphChartSettings": {
+                    "connectNulls": false
+                },
+                "honeycombSettings": {
+                    "showHive": true,
+                    "showLegend": true,
+                    "showLabels": false
+                }
+            }
+        },
+        {
+            "name": "MSMQ Instances",
+            "nameSize": "small",
+            "tileType": "DATA_EXPLORER",
+            "configured": true,
+            "bounds": {
+                "top": 152,
+                "left": 304,
+                "width": 152,
+                "height": 152
+            },
+            "tileFilter": {},
+            "customName": "Single value",
+            "queries": [{
+                "id": "A",
+                "timeAggregation": "DEFAULT",
+                "splitBy": [
+                    "dt.entity.wmi:msmq_service_instance"
+                ],
+                "metricSelector": "custom.msmq_wmi.bytes_in_queue:splitBy(\"dt.entity.wmi:msmq_service_instance\"):auto:splitBy():count",
+                "enabled": true
+            }],
+            "visualConfig": {
+                "type": "SINGLE_VALUE",
+                "global": {
+                    "hideLegend": false
+                },
+                "rules": [{
+                    "matcher": "A:",
+                    "unitTransform": "",
+                    "valueFormat": "auto",
+                    "properties": {
+                        "color": "DEFAULT",
+                        "seriesType": "COLUMN"
+                    },
+                    "seriesOverrides": []
+                }],
+                "axes": {
+                    "xAxis": {
+                        "displayName": "",
+                        "visible": true
+                    },
+                    "yAxes": [{
+                        "displayName": "",
+                        "visible": true,
+                        "min": "AUTO",
+                        "max": "AUTO",
+                        "position": "LEFT",
+                        "queryIds": [
+                            "A"
+                        ],
+                        "defaultAxis": true
+                    }]
+                },
+                "heatmapSettings": {
+                    "yAxis": "VALUE"
+                },
+                "singleValueSettings": {
+                    "showTrend": false,
+                    "showSparkLine": false,
+                    "linkTileColorToThreshold": false
+                },
+                "thresholds": [{
+                    "axisTarget": "LEFT",
+                    "columnId": "Bytes in Queue (MSMQ)",
+                    "rules": [{
+                            "color": "#7dc540"
+                        },
+                        {
+                            "color": "#f5d30f"
+                        },
+                        {
+                            "color": "#dc172a"
+                        }
+                    ],
+                    "queryId": "A",
+                    "visible": true
+                }],
+                "tableSettings": {
+                    "isThresholdBackgroundAppliedToCell": false
+                },
+                "graphChartSettings": {
+                    "connectNulls": false
+                },
+                "honeycombSettings": {
+                    "showHive": true,
+                    "showLegend": true,
+                    "showLabels": false
+                }
+            },
+            "queriesSettings": {
+                "resolution": ""
+            }
+        },
+        {
+            "name": "Image",
+            "tileType": "IMAGE",
+            "configured": true,
+            "bounds": {
+                "top": 0,
+                "left": 0,
+                "width": 76,
+                "height": 76
+            },
+            "tileFilter": {},
+            "image": "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwLCAwLCAxMDAwLCAxMDAwIiBoZWlnaHQ9IjEwMDAiIHdpZHRoPSIxMDAwIiB5PSIwIiB4PSIwIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiPgogIDxnIGlkPSJMYXllcl8xIj4KICAgIDxwYXRoIGZpbGw9IiMwMDc4RDQiIGQ9Ik02My4wMDQsNTguNzQ0IEw2My4wMDQsNDU2LjEzNSBMMTQ0LjgyLDQ1Ni4xMzUgTDE0NC44MiwxNzcuMjkzIEwxNDUuOTMzLDE3Ny4yOTMgTDI0My4zMzMsNDU2LjEzNSBMMzEwLjY3OCw0NTYuMTM1IEw0MDguMDc4LDE3NC41MSBMNDA5LjE5MSwxNzQuNTEgTDQwOS4xOTEsNDU2LjEzNSBMNDkxLjAwNyw0NTYuMTM1IEw0OTEuMDA3LDU4Ljc0NCBMMzY4LjAwNSw1OC43NDQgTDI4MC4wNjcsMzMyLjAyIEwyNzguOTU0LDMzMi4wMiBMMTg2LjAwNiw1OC43NDQgeiI+PC9wYXRoPgogICAgPHBhdGggZmlsbD0iIzAwNzhENCIgZD0iTTYyNy4zNjcsMzI0LjUwNiBMNTQyLjc2OCwzMjQuNTA2IFE1NDIuMjEyLDM2MS4yNCA1NTYuMTI2LDM4Ny45NTUgUTU3MC4wNCw0MTQuNjcxIDU5My42OTQsNDMxLjkyNCBRNjE3LjM0OSw0NDkuMTc4IDY0OC4yMzgsNDU3LjI0OCBRNjc5LjEyOCw0NjUuMzE5IDcxMS45NjYsNDY1LjMxOSBRNzUyLjU5NSw0NjUuMzE5IDc4My40ODUsNDU1Ljg1NyBRODE0LjM3NSw0NDYuMzk1IDgzNS4yNDYsNDI5LjQyIFE4NTYuMTE3LDQxMi40NDQgODY2LjY5MiwzODkuMDY4IFE4NzcuMjY3LDM2NS42OTIgODc3LjI2NywzMzguNDIgUTg3Ny4yNjcsMzA1LjAyNiA4NjMuMDc1LDI4My41OTggUTg0OC44ODIsMjYyLjE3IDgyOS40MDIsMjQ5LjM2OSBRODA5LjkyMiwyMzYuNTY4IDc5MC4xNjQsMjMwLjcyNCBRNzcwLjQwNiwyMjQuODggNzU5LjI3NCwyMjIuNjU0IFE3MjEuOTg0LDIxMy4xOTIgNjk4Ljg4NiwyMDcuMDcgUTY3NS43ODksMjAwLjk0NyA2NjIuNzA5LDE5NC44MjUgUTY0OS42MywxODguNzAzIDY0NS4xNzcsMTgxLjQ2NyBRNjQwLjcyNSwxNzQuMjMyIDY0MC43MjUsMTYyLjU0NCBRNjQwLjcyNSwxNDkuNzQzIDY0Ni4yOSwxNDEuMzk0IFE2NTEuODU2LDEzMy4wNDYgNjYwLjQ4MywxMjcuNDggUTY2OS4xMSwxMjEuOTE0IDY3OS42ODUsMTE5LjY4OCBRNjkwLjI1OSwxMTcuNDYyIDcwMC44MzQsMTE3LjQ2MiBRNzE2Ljk3NSwxMTcuNDYyIDczMC42MTEsMTIwLjI0NSBRNzQ0LjI0NywxMjMuMDI3IDc1NC44MjIsMTI5LjcwNiBRNzY1LjM5NiwxMzYuMzg1IDc3MS43OTcsMTQ4LjA3MyBRNzc4LjE5OCwxNTkuNzYxIDc3OS4zMTEsMTc3LjU3MSBMODYzLjkwOSwxNzcuNTcxIFE4NjMuOTA5LDE0My4wNjQgODUwLjgzLDExOC44NTMgUTgzNy43NTEsOTQuNjQyIDgxNS40ODgsNzkuMDU4IFE3OTMuMjI1LDYzLjQ3NCA3NjQuNTYyLDU2LjUxNyBRNzM1Ljg5OCw0OS41NiA3MDQuNzMsNDkuNTYgUTY3OC4wMTUsNDkuNTYgNjUxLjI5OSw1Ni43OTYgUTYyNC41ODQsNjQuMDMxIDYwMy40MzQsNzkuMDU4IFE1ODIuMjg1LDk0LjA4NiA1NjkuMjA1LDExNi42MjcgUTU1Ni4xMjYsMTM5LjE2OCA1NTYuMTI2LDE2OS43NzkgUTU1Ni4xMjYsMTk3LjA1MSA1NjYuNDIyLDIxNi4yNTMgUTU3Ni43MTksMjM1LjQ1NSA1OTMuNDE2LDI0OC4yNTYgUTYxMC4xMTMsMjYxLjA1NyA2MzEuMjYzLDI2OS4xMjcgUTY1Mi40MTMsMjc3LjE5OCA2NzQuNjc1LDI4Mi43NjMgUTY5Ni4zODIsMjg4Ljg4NiA3MTcuNTMxLDI5My44OTUgUTczOC42ODEsMjk4LjkwNCA3NTUuMzc4LDMwNS41ODMgUTc3Mi4wNzUsMzEyLjI2MiA3ODIuMzcyLDMyMi4yOCBRNzkyLjY2OCwzMzIuMjk4IDc5Mi42NjgsMzQ4LjQzOSBRNzkyLjY2OCwzNjMuNDY2IDc4NC44NzYsMzczLjIwNiBRNzc3LjA4NCwzODIuOTQ2IDc2NS4zOTYsMzg4LjUxMiBRNzUzLjcwOCwzOTQuMDc3IDc0MC4zNTEsMzk2LjAyNSBRNzI2Ljk5MywzOTcuOTczIDcxNS4zMDUsMzk3Ljk3MyBRNjk4LjA1MSwzOTcuOTczIDY4MS45MTEsMzkzLjc5OSBRNjY1Ljc3LDM4OS42MjUgNjUzLjgwNCwzODAuOTk4IFE2NDEuODM4LDM3Mi4zNzEgNjM0LjYwMiwzNTguNDU3IFE2MjcuMzY3LDM0NC41NDMgNjI3LjM2NywzMjQuNTA2IHoiPjwvcGF0aD4KICAgIDxwYXRoIGZpbGw9IiMwMENGRkYiIGQ9Ik02My4wMDQsNTM1LjQ5OSBMNjMuMDA0LDkzMi44OSBMMTQ0LjgyLDkzMi44OSBMMTQ0LjgyLDY1NC4wNDkgTDE0NS45MzMsNjU0LjA0OSBMMjQzLjMzMyw5MzIuODkgTDMxMC42NzgsOTMyLjg5IEw0MDguMDc4LDY1MS4yNjYgTDQwOS4xOTEsNjUxLjI2NiBMNDA5LjE5MSw5MzIuODkgTDQ5MS4wMDcsOTMyLjg5IEw0OTEuMDA3LDUzNS40OTkgTDM2OC4wMDUsNTM1LjQ5OSBMMjgwLjA2Nyw4MDguNzc1IEwyNzguOTU0LDgwOC43NzUgTDE4Ni4wMDYsNTM1LjQ5OSB6Ij48L3BhdGg+CiAgICA8cGF0aCBmaWxsPSIjMDBDRkZGIiBkPSJNODI5LjQwMiw4MjcuMTQyIFE4NDAuNTMzLDgxMi4xMTUgODQ3LjIxMiw3ODkuODUyIFE4NTMuODkxLDc2Ny41ODkgODUzLjg5MSw3MzUuODY0IFE4NTMuODkxLDcwOS43MDYgODQ4LjA0Nyw2ODUuMjE2IFE4NDIuMjAzLDY2MC43MjcgODI5LjQwMiw2NDEuNTI2IFE4MTYuNjAxLDYyMi4zMjQgNzk2LjAwOCw2MTAuOTE0IFE3NzUuNDE1LDU5OS41MDUgNzQ1LjkxNiw1OTkuNTA1IFE3MTYuNDE4LDU5OS41MDUgNjk1LjgyNSw2MTAuOTE0IFE2NzUuMjMyLDYyMi4zMjQgNjYyLjQzMSw2NDEuNTI2IFE2NDkuNjMsNjYwLjcyNyA2NDMuNzg2LDY4NS4yMTYgUTYzNy45NDIsNzA5LjcwNiA2MzcuOTQyLDczNS44NjQgUTYzNy45NDIsNzYwLjkxIDY0My43ODYsNzg0LjU2NCBRNjQ5LjYzLDgwOC4yMTkgNjYyLjQzMSw4MjcuMTQyIFE2NzUuMjMyLDg0Ni4wNjUgNjk1LjgyNSw4NTcuNDc1IFE3MTYuNDE4LDg2OC44ODUgNzQ1LjkxNiw4NjguODg1IFE3NTkuODMxLDg2OC44ODUgNzY3LjA2Niw4NjcuNzcyIFE3NzQuMzAyLDg2Ni42NTkgNzgwLjk4LDg2My4zMTkgTDc0My42OSw4MjkuMzY4IEw3ODQuMzIsNzg1Ljk1NiB6IE04NDIuMjAzLDkxOC45NzYgUTgwMi42ODcsOTQxLjc5NiA3NDUuOTE2LDk0MS43OTYgUTcwMC4yNzgsOTQxLjc5NiA2NjMuODIyLDkyNS45MzMgUTYyNy4zNjcsOTEwLjA3MSA2MDIuMzIxLDg4Mi4yNDMgUTU3Ny4yNzYsODU0LjQxNCA1NjMuOTE4LDgxNi44NDUgUTU1MC41Niw3NzkuMjc3IDU1MC41Niw3MzUuODY0IFE1NTAuNTYsNjkxLjMzOSA1NjMuOTE4LDY1My4yMTQgUTU3Ny4yNzYsNjE1LjA4OSA2MDIuMzIxLDU4Ni43MDMgUTYyNy4zNjcsNTU4LjMxOCA2NjMuODIyLDU0Mi4xNzggUTcwMC4yNzgsNTI2LjAzNyA3NDUuOTE2LDUyNi4wMzcgUTc5Mi4xMTIsNTI2LjAzNyA4MjguMjg5LDU0Mi4xNzggUTg2NC40NjYsNTU4LjMxOCA4ODkuNTEyLDU4Ni43MDMgUTkxNC41NTcsNjE1LjA4OSA5MjcuOTE1LDY1My4yMTQgUTk0MS4yNzMsNjkxLjMzOSA5NDEuMjczLDczNS44NjQgUTk0MS4yNzMsNzc5LjI3NyA5MjcuOTE1LDgxNi41NjcgUTkxNC41NTcsODUzLjg1NyA4ODkuNTEyLDg4Mi4yNDMgTDkzOS4wNDYsOTI3LjMyNSBMODk4LjQxNyw5NjkuNjI0IHoiPjwvcGF0aD4KICA8L2c+Cjwvc3ZnPgo="
+        },
+        {
+            "name": "Markdown",
+            "tileType": "MARKDOWN",
+            "configured": true,
+            "bounds": {
+                "top": 0,
+                "left": 76,
+                "width": 1330,
+                "height": 76
+            },
+            "tileFilter": {},
+            "markdown": "# MSMQ Overview\n---"
+        },
+        {
+            "name": "MSMQ Queues",
+            "nameSize": "small",
+            "tileType": "DATA_EXPLORER",
+            "configured": true,
+            "bounds": {
+                "top": 152,
+                "left": 456,
+                "width": 152,
+                "height": 152
+            },
+            "tileFilter": {},
+            "customName": "Single value",
+            "queries": [{
+                "id": "A",
+                "timeAggregation": "DEFAULT",
+                "splitBy": [
+                    "dt.entity.wmi:msmq_service_instance_queue"
+                ],
+                "metricSelector": "custom.msmq_wmi.bytes_in_queue:splitBy(\"dt.entity.wmi:msmq_service_instance_queue\"):auto:splitBy():count",
+                "enabled": true
+            }],
+            "visualConfig": {
+                "type": "SINGLE_VALUE",
+                "global": {
+                    "hideLegend": false
+                },
+                "rules": [{
+                    "matcher": "A:",
+                    "unitTransform": "",
+                    "valueFormat": "auto",
+                    "properties": {
+                        "color": "DEFAULT",
+                        "seriesType": "COLUMN"
+                    },
+                    "seriesOverrides": []
+                }],
+                "axes": {
+                    "xAxis": {
+                        "displayName": "",
+                        "visible": true
+                    },
+                    "yAxes": [{
+                        "displayName": "",
+                        "visible": true,
+                        "min": "AUTO",
+                        "max": "AUTO",
+                        "position": "LEFT",
+                        "queryIds": [
+                            "A"
+                        ],
+                        "defaultAxis": true
+                    }]
+                },
+                "heatmapSettings": {
+                    "yAxis": "VALUE"
+                },
+                "singleValueSettings": {
+                    "showTrend": false,
+                    "showSparkLine": false,
+                    "linkTileColorToThreshold": false
+                },
+                "thresholds": [{
+                    "axisTarget": "LEFT",
+                    "rules": [{
+                            "color": "#7dc540"
+                        },
+                        {
+                            "color": "#f5d30f"
+                        },
+                        {
+                            "color": "#dc172a"
+                        }
+                    ],
+                    "queryId": "",
+                    "visible": true
+                }],
+                "tableSettings": {
+                    "isThresholdBackgroundAppliedToCell": false
+                },
+                "graphChartSettings": {
+                    "connectNulls": false
+                },
+                "honeycombSettings": {
+                    "showHive": true,
+                    "showLegend": true,
+                    "showLabels": false
+                }
+            },
+            "queriesSettings": {
+                "resolution": ""
+            }
+        }
+    ]
+}

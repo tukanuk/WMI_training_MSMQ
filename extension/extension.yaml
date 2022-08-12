@@ -1,0 +1,379 @@
+name: custom:com.dynatrace.extension.wmi.msmq
+version: "1.0.20"
+minDynatraceVersion: "1.235"
+author:
+  name: Dynatrace
+
+dashboards:
+  - path: dashboards/msmq_overview.json
+
+vars:
+  - id: queueNameFilter
+    displayName: "Filter pattern for queue name. Use [WQL](https://docs.microsoft.com/en-us/windows/win32/wmisdk/querying-with-wql) [WHERE](https://docs.microsoft.com/en-us/windows/win32/wmisdk/where-clause) syntax. **EXAMPLES** For all queues use: `Name IS NOT NULL`. For only private queues: `Name LIKE '%private%'`. See https://docs.microsoft.com/en-us/windows/win32/wmisdk/where-clause for full list of options and examples"
+    type: variable
+
+metrics:
+  - key: msmq.MessagesinQueue
+    metadata:
+      displayName: Messages in Queue (MSMQ)
+      description: Count of messages in a MSMQ queue
+      unit: Count
+      tags: 
+        - MSMQ
+        - queue
+        - mq 
+  - key: msmq.BytesInQueue
+    metadata:
+      displayName: Bytes in Queue (MSMQ)
+      description: Total bytes in a MSMQ queue
+      unit: Byte
+      tags:
+        - MSMQ
+        - queue
+        - mq
+wmi:
+  - group: Host
+    interval:
+      minutes: 1
+    dimensions:
+      - key: host
+        value: this:device.host
+    subgroups:
+      - subgroup: Queue
+        query: SELECT Name, MessagesinQueue, BytesInQueue FROM Win32_PerfRawData_msmq_MSMQQueue WHERE var:queueNameFilter
+        metrics:
+          - key: msmq.MessagesinQueue
+            value: column:MessagesinQueue
+          - key: msmq.BytesInQueue
+            value: column:BytesInQueue
+        dimensions:
+          - key: queue
+            value: column:Name
+topology:
+  types:
+    - enabled: true
+      name: wmi:msmq_service_instance
+      displayName: MSMQ Service
+      rules:
+        - idPattern: wmi_msmq_service_instance_{dt.entity.host}
+          instanceNamePattern: MSMQ Service on {host.name}
+          iconPattern: cluster
+          sources:
+          - sourceType: Metrics
+            condition: $prefix(msmq)
+          requiredDimensions:
+            - key: device.name
+              valuePattern: $eq(localhost)
+          role: default
+        - idPattern: wmi_msmq_service_instance_{device.name}
+          sources:
+            - sourceType: Metrics
+              condition: $prefix(msmq)
+          instanceNamePattern: MSMQ Service on {device.name}
+          iconPattern: cluster
+    - enabled: true
+      name: wmi:msmq_service_instance_queue
+      displayName: MSMQ Service Queue
+      rules:
+        - idPattern: wmi_msmq_queue_{dt.entity.host}_{queue}
+          instanceNamePattern: "{queue} on {host.name}"
+          iconPattern: queue
+          sources:
+            - sourceType: Metrics
+              condition: $prefix(msmq)
+          requiredDimensions:
+            - key: device.name
+              valuePattern: $eq(localhost)
+        - idPattern: wmi_msmq_queue_{device.name}_{queue}
+          instanceNamePattern: "{queue} on {device.name}"
+          iconPattern: queue
+          sources:
+            - sourceType: Metrics
+              condition: $prefix(msmq)
+  
+  relationships:
+    - enabled: true
+      fromType: wmi:msmq_service_instance_queue
+      typeOfRelation: INSTANCE_OF
+      toType: wmi:msmq_service_instance
+      sources:
+        - sourceType: Metrics
+          condition: $prefix(msmq)
+    - enabled: true
+      fromType: wmi:msmq_service_instance
+      typeOfRelation: RUNS_ON
+      toType: host
+   
+      sources:
+        - sourceType: Metrics
+          condition: $prefix(msmq)
+    - enabled: true
+      fromType: wmi:msmq_service_instance_queue
+      typeOfRelation: RUNS_ON
+      toType: host
+      sources:
+        - sourceType: Metrics
+          condition: $prefix(com.dynatrace.extension.wmi.msmq)
+screens:
+  - entityType: HOST
+    detailsInjections:
+      - type: ENTITIES_LIST
+        key: msmq_service_instance_injection
+        entitySelectorTemplate: type(wmi:msmq_service_instance), fromRelationships.runsOn($(entityConditions))
+        conditions:
+          - relatedEntity|entitySelectorTemplate=type(wmi:msmq_service_instance),fromRelationships.runsOn($(entityConditions))
+
+  - entityType: wmi:msmq_service_instance
+    propertiesCard:
+      displayOnlyConfigured: true
+      properties:
+        - type: RELATION
+          relation:
+            entitySelectorTemplate: type(HOST), toRelationships.runsOn($(entityConditions))
+            displayName: Host
+    listSettings:
+      staticContent:
+        showGlobalFilter: true
+        header:
+          title: "MSMQ Service Instances"
+          description: "Overview of all MSMQ Service instances monitored through WMI"
+          icon: cluster
+        breadcrumbs:
+          - type: NOOP
+            displayName: MSMQ
+      layout:
+        autoGenerate: false
+        cards:
+          - key: msmq_instance_list_self
+            type: ENTITIES_LIST
+    detailsSettings:
+      staticContent:
+        showProblems: true
+        showProperties: true
+        showTags: true
+        showGlobalFilter: true
+        showAddTag: true
+        breadcrumbs:
+          - type: NOOP
+            displayName: MSMQ
+          - type: ENTITY_LIST_REF
+            entityType: wmi:msmq_service_instance
+            displayName: MSMQ Service Instances
+      layout:
+        autoGenerate: false
+        cards:
+        - type: "CHART_GROUP"
+          key: "wmi_msmq_chart_metrics"
+        - type: "ENTITIES_LIST"
+          key: "wmi_msmq_queue_names"
+    chartsCards:
+      - key: "wmi_msmq_chart_metrics"
+        displayName: "Queues"
+        numberOfVisibleCharts: 2
+        charts:
+          - displayName: Length of Queue
+            visualization:
+              themeColor: BLUE
+              seriesType: LINE
+            metrics:
+              - metricSelector: com.dynatrace.extension.wmi.msmq.messages_in_queue:splitBy("dt.entity.wmi:msmq_service_instance_queue"):sort(value(auto,descending)):limit(10)
+              # - metricSelector: msmq.MessagesinQueue:splitBy("dt.entity.wmi:msmq_service_instance_queue"):sort(value(auto,descending)):limit(10)
+          - displayName: Bytes in Queue    
+            visualization:
+              themeColor: ROYALBLUE
+              seriesType: AREA
+            metrics:
+              - metricSelector: msmq.BytesInQueue:splitBy("dt.entity.wmi:msmq_service_instance_queue"):sort(value(auto,descending)):limit(10)
+    entitiesListCards:
+      - key: msmq_service_instance_injection
+        displayName: Related MSMQ Service Instances
+        pageSize: 5
+        displayCharts: true
+        displayIcons: true
+        enableDetailsExpandability: true
+        numberOfVisibleCharts: 2
+        charts:
+          - displayName: Length of Queue
+            visualization:
+              themeColor: BLUE
+              seriesType: COLUMN
+            metrics:
+              - metricSelector: msmq.MessagesinQueue:splitBy()
+          - displayName: Bytes in Queue    
+            visualization:
+              themeColor: ROYALBLUE
+              seriesType: AREA
+            metrics:
+              - metricSelector: msmq.BytesInQueue:splitBy()
+      - key: msmq_instance_list_self
+        displayName: MSMQ Service instances - v20
+        displayIcons: true
+        # displayCharts: false
+        displayCharts: true
+        enableDetailsExpandability: true
+        numberOfVisibleCharts: 2
+        pageSize: 25
+        filtering:
+          entityFilters:
+            - displayName: Entity
+              filters:
+                - type: entityName
+                  entityTypes:
+                    - wmi:msmq_service_instance
+                  displayName: Name
+                  freeText: true
+                  modifier: contains
+                  defaultSearch: true
+                  distinct: false
+        charts:
+          - displayName: Length of Queue
+            visualization:
+              themeColor: BLUE
+              seriesType: COLUMN
+            metrics:
+              - metricSelector: msmq.MessagesinQueue:splitBy("dt.entity.wmi:msmq_service_instance_queue"):sort(value(auto,descending)):limit(10)
+          - displayName: Bytes in Queue    
+            visualization:
+              themeColor: ROYALBLUE
+              seriesType: AREA
+            metrics:
+              - metricSelector: msmq.BytesInQueue:splitBy("dt.entity.wmi:msmq_service_instance_queue"):sort(value(auto,descending)):limit(10)
+      - key: "wmi_msmq_queue_names"
+        displayName: Queues on Instance
+        displayIcons: true
+        displayCharts: false
+        enableDetailsExpandability: true
+        numberOfVisibleCharts: 2
+        pageSize: 25
+        entitySelectorTemplate: "type(wmi:msmq_service_instance_queue),fromRelationships.isInstanceOf($(entityConditions))"
+        filtering:
+          relationships:
+            - "type(wmi:msmq_service_instance) AND toRelationships.isInstanceOf($(entityConditions))"
+          entityFilters:
+            - displayName: Entity
+              filters:
+                - type: entityName
+                  entityTypes:
+                    - wmi:msmq_service_instance_queue
+                  displayName: Name
+                  freeText: true
+                  modifier: contains 
+                  defaultSearch: true
+                  distinct: false
+        charts:
+          - displayName: Length of Queue
+            visualization:
+              themeColor: BLUE
+              seriesType: COLUMN
+            metrics:
+              - metricSelector: msmq.MessagesinQueue:splitBy("dt.entity.wmi:msmq_service_instance_queue"):sort(value(auto,descending)):limit(10)
+          - displayName: Bytes in Queue    
+            visualization:
+              themeColor: ROYALBLUE
+              seriesType: AREA
+            metrics:
+              - metricSelector: msmq.BytesInQueue:splitBy("dt.entity.wmi:msmq_service_instance_queue"):sort(value(auto,descending)):limit(10)
+  
+  - entityType: wmi:msmq_service_instance_queue
+    propertiesCard:
+      displayOnlyConfigured: true
+      properties:
+        - type: RELATION
+          relation:
+            entitySelectorTemplate: type(wmi:msmq_service_instance), toRelationships.isInstanceOf($(entityConditions))
+            displayName: Service Instance
+        - type: RELATION
+          relation:
+            entitySelectorTemplate: type(HOST), toRelationships.runsOn($(entityConditions))
+            displayName: Host
+        - type: ATTRIBUTE
+          attribute:
+            key: host
+            displayName: Host_att
+    listSettings:
+      staticContent:
+        showGlobalFilter: true
+        header:
+          title: "MSMQ Queues"
+          description: "Overview of all MSMQ Queues monitored through WMI"
+          icon: queue
+        breadcrumbs:
+          - type: NOOP
+            displayName: MSMQ
+      layout:
+        autoGenerate: false
+        cards:
+          - key: msmq_queue_list_self
+            type: ENTITIES_LIST
+    detailsSettings:
+      staticContent:
+        showProblems: true
+        showProperties: true
+        showTags: true
+        showGlobalFilter: false
+        showAddTag: true
+        breadcrumbs:
+          - type: NOOP
+            displayName: MSMQ
+          - type: ENTITY_LIST_REF
+            entityType: wmi:msmq_service_instance
+            displayName: MSMQ Service Instances
+          - type: ENTITY_REF
+            entitySelectorTemplate: "type(wmi:msmq_service_instance),toRelationships.isInstanceOf($(entityConditions))"
+          - type: ENTITY_REF
+            entitySelectorTemplate: "type(wmi:msmq_service_instance_queue),fromRelationships.isInstanceOf($(entityConditions))"
+      layout:
+        autoGenerate: false
+        cards:
+          - type: CHART_GROUP
+            key: wmi_msmq_queue_chart_metrics
+    chartsCards:
+      - key: wmi_msmq_queue_chart_metrics
+        displayName: Queue
+        numberOfVisibleCharts: 2
+        charts:
+          - displayName: Length of Queue
+            visualization:
+              themeColor: BLUE
+              seriesType: COLUMN
+            metrics:
+              - metricSelector: msmq.MessagesinQueue
+          - displayName: Bytes in Queue    
+            visualization:
+              themeColor: ROYALBLUE
+              seriesType: AREA
+            metrics:
+              - metricSelector: msmq.BytesInQueue 
+    entitiesListCards:
+      - key: msmq_queue_list_self
+        displayName: MSMQ Queues
+        displayIcons: true
+        displayCharts: false
+        enableDetailsExpandability: true
+        numberOfVisibleCharts: 2
+        pageSize: 20
+        filtering:
+          entityFilters:
+            - displayName: FilterByName
+              filters:
+                - type: entityName
+                  entityTypes:
+                    - wmi:msmq_service_instance_queue
+                  displayName: Name
+                  freeText: true
+                  modifier: contains
+                  defaultSearch: true
+                  distinct: false
+        charts:
+          - displayName: Length of Queue
+            visualization:
+              themeColor: BLUE
+              seriesType: COLUMN
+            metrics:
+              - metricSelector: msmq.MessagesinQueue:splitBy("dt.entity.wmi:msmq_service_instance_queue"):sort(value(auto,descending)):limit(10)
+          - displayName: Bytes in Queue    
+            visualization:
+              themeColor: ROYALBLUE
+              seriesType: AREA
+            metrics:
+              - metricSelector: msmq.BytesInQueue:splitBy("dt.entity.wmi:msmq_service_instance_queue"):sort(value(auto,descending)):limit(10)
