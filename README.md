@@ -5,8 +5,6 @@
 ```
 .
 ├── README.md
-├── build
-│   └── custom_com.dynatrace.extension.wmi.msmq-1.0.20.zip
 ├── build_and_upload_sprint.md
 ├── certs
 ├── extension
