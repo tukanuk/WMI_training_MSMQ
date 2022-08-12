@@ -65,7 +65,7 @@ Building and deployment of your extension is explained in [WMI tutorial - extens
 export EXTENSION_TOKEN=<api_token_with_correct_permissions_here>
 export VERSION=1.0.19
 dt extension build --target-directory ./build --private-key "/Users/admin/dev/certs/developer.key" --no-dev-passphrase --certificate "/Users/admin/dev/certs/developer.pem"
-dt extension upload --tenant-url https://aaa12345.live.dynatracelabs.com --api-token $EXTENSION_TOKEN "./build/custom_com.dynatrace.extension.wmi.msmq-$VERSION.zip"
+dt extension upload --tenant-url https://aaa12345.live.dynatrace.com --api-token $EXTENSION_TOKEN "./build/custom_com.dynatrace.extension.wmi.msmq-$VERSION.zip"
 ```
 
 
