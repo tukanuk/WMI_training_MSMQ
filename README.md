@@ -47,8 +47,6 @@ Creating and distributing the developer certificate and key is best explained in
 
 Building and deployment of your extension is explained in [WMI tutorial - extension package](https://www.dynatrace.com/support/help/extend-dynatrace/extensions20/data-sources/wmi-extensions/wmi-tutorial/wmi-tutorial-01) but can be summarized thus:
 
-#### On a linux or MacOS host
-
 1. Set an environment variable called `EXTENSION_TOKEN` with these permissions:
 - `Read extension monitoring configurations`
 - `Write extension monitoring configurations`
@@ -61,7 +59,7 @@ Building and deployment of your extension is explained in [WMI tutorial - extens
 3. Run `dt extension build` with flags in place that define the location of your private key and certificate and where you want your build to be stored (see example).
 4. Run `dt extension upload` with flags to set your tenant URL, your api token (via your environment variable) and the path to the `.zip` file containing your extension.
 
-##### Example
+##### Example for a Linux or MacOS host
 
 ```zsh
 export EXTENSION_TOKEN=<api_token_with_correct_permissions_here>
